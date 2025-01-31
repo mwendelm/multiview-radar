@@ -1,16 +1,6 @@
 function ErrStatus = rstd_init(RSTD_DLL_Path, u, cip, fixport)
 
-    %parameter
-    idleTime=10; %us
-    adcStartTime = 6; %us
-    rampEndTime=128; %us
-    freqSlope=22.595; %MHz/us
-    txStartTime=1; %us
-    numAdcSamples=366;
-    SampleRate=3000; %ksps
-    frameCount=2400; %receive one minute %use 0 for endless recording
-    loopCount=16;
-    periodicity=25;
+    parameter
 
     if (strcmp(which('RtttNetClientAPI.RtttNetClient.IsConnected'),''))
         disp('Adding RSTD Assembly');
@@ -189,7 +179,9 @@ function ErrStatus = rstd_init(RSTD_DLL_Path, u, cip, fixport)
         writeline(u, "--Chirp 3 config Pass--", cip, fixport);
     end
     pause(1);
-    
+    frameCount=2400; %receive one minute %use 0 for endless recording
+    loopCount=16;
+    periodicity=25;
     Lua_String = strcat('ar1.FrameConfig(0, 2,', string(frameCount),',', string(loopCount),',', string(periodicity),', 0, 0, 1)');
     ErrStatus = RtttNetClientAPI.RtttNetClient.SendCommand(Lua_String);
     if (ErrStatus ~= 30000)
